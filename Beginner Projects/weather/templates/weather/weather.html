@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f8ff;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Weather icon animation */
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Floating effect for icon */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Temperature and city styling */
+        .temperature {
+            font-size: 2.5em;
+            margin: 0;
+            color: #ff6347;
+        }
+
+        .city {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .description {
+            font-size: 1.2em;
+            color: #777;
+            text-transform: capitalize;
+        }
+
+        /* Input for city search */
+        .city-form {
+            margin-top: 15px;
+        }
+
+        .city-form input[type="text"] {
+            padding: 8px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .city-form button {
+            padding: 8px;
+            font-size: 1em;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .city-form button:hover {
+            background-color: #e55347;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="city">Weather in {{ weather_data.city }}</h2>
+
+    {% if weather_data %}
+        <img class="weather-icon" src="http://openweathermap.org/img/wn/{{ weather_data.icon }}@2x.png" alt="Weather Icon">
+        <p class="temperature">{{ weather_data.temperature }}°C</p>
+        <p class="description">{{ weather_data.description }}</p>
+    {% else %}
+        <p>Weather data is currently unavailable.</p>
+    {% endif %}
+
+    <!-- City search form -->
+    <form class="city-form" method="get">
+        <input type="text" name="city" placeholder="Enter city" required>
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+</body>
+</html>

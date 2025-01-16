@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px 20px;
+        background-color: #e8f5e9;
+        z-index: 1000; /* Ensures the header stays on top of other elements */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: adds a slight shadow to separate the header from content */
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #37474f;
+        margin: 0;
+        padding: 0;
+        padding-top: 60px; /* Add padding to the top of the body to prevent content from being hidden under the fixed header */
+    }
+
+    main {
+        text-align: center;
+        margin-top: 20px;
+}
+        h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: #1b5e20;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #1b5e20;
+        }
+        .hamburger-menu {
+            position: absolute;
+            top: 10px;
+            right: 40px;
+            cursor: pointer;
+            display: none;
+            background-color: #2e7d32;
+            color: white;
+            padding: 10px;
+            border: none;
+            font-size: 1.2rem;
+        }
+        .hamburger-menu:hover {
+            background-color: #1b5e20;
+        }
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 50px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 10;
+        }
+        .menu-dropdown a {
+            display: block;
+            text-decoration: none;
+            color: #37474f;
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .menu-dropdown a:hover {
+            background-color: #e8f5e9;
+        }
+        main {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .overview {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .overview-box {
+            background-color: #f1f1f1;
+            padding: 20px;
+            margin: 10px 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        .overview-box h3 {
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+        .overview-box p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        label {
+            font-size: 1.2rem;
+            color: #37474f;
+        }
+        select {
+            padding: 10px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        .result, .plots {
+            margin-top: 20px;
+        }
+        .rating-plot img {
+            max-width: 35%; /* Smaller size for rating plot */
+        }
+        .other-plots img {
+            max-width: 90%; /* Larger size for other images */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="back-button">Back to Home</a>
+        <h1>Analysis Dashboard</h1>
+        <button class="hamburger-menu" onclick="toggleMenu()">☰</button>
+        <div class="menu-dropdown" id="menu_dropdown">
+            <!-- Links will be dynamically generated -->
+        </div>
+    </header>
+
+    <main>
+        <div>
+            <label for="analyzed_categories">Previously Analyzed Categories:</label>
+            <select id="analyzed_categories" name="analyzed_categories" onchange="loadPlots(this.value)">
+                <option value="" disabled selected>Select a Category</option>
+                {% for category in analyzed_categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="overview" id="overview_section" style="display: none;">
+            <div class="overview-box">
+                <h3>Total Reviews</h3>
+                <p>{{ total_reviews }}</p>
+            </div>
+            <div class="overview-box">
+                <h3>Total Products</h3>
+                <p>{{ total_products }}</p>
+            </div>
+            <div class="overview-box">
+                <h3>Positive Reviews</h3>
+                <p>😊{{ total_positive_reviews }}</p>
+            </div>
+            <div class="overview-box">
+                <h3>Negative Reviews</h3>
+                <p>😡{{ total_negative_reviews }}</p>
+            </div>
+            <div class="overview-box">
+                <h3>Neutral Reviews</h3>
+                <p>😐{{ total_neutral_reviews }}</p>
+            </div>
+        </div>
+
+        <div class="plots" id="plot_area">
+            <!-- Plots will be dynamically loaded here -->
+        </div>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            const menuDropdown = document.getElementById('menu_dropdown');
+            // Toggle the display of the menu dropdown
+            menuDropdown.style.display = (menuDropdown.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function loadPlots(category) {
+            const plotArea = document.getElementById('plot_area');
+            const overviewSection = document.getElementById('overview_section');
+
+            if (!category) {
+                plotArea.innerHTML = ''; // Clear existing plots
+                overviewSection.style.display = 'none'; // Hide the overview section
+                return;
+            }
+
+            overviewSection.style.display = 'flex'; // Show the overview section
+            plotArea.innerHTML = '';
+
+            const plots = [
+                { id: 'sentiment_distribution_plot', title: 'Sentiment Distribution', file: `static/plots/${category}_sentiment_distribution.html`, type: 'iframe', class: 'other-plots' },
+                { id: 'brandwise_sentiment_distribution_plot', title: 'Sentiment Distribution by Brand', file: `static/plots/${category}_brandwise_sentiment_distribution.html`, type: 'iframe', class: 'other-plots' },
+                { id: 'rating_plot', title: 'Rating Distribution', file: `static/plots/${category}_rating_plot.png`, type: 'image', class: 'rating-plot' },
+                { id: 'price_plot', title: 'Price vs Sentiment Score Distribution', file: `static/plots/${category}_price_vs_sentiment.png`, type: 'image', class: 'other-plots' },
+                { id: 'year_wise_plot', title: 'Year-wise Sentiment Analysis', file: `static/plots/${category}_year_wise_plot.html`, type: 'iframe', class: 'other-plots' },
+                { id: 'wordcloud_plot', title: 'Wordcloud Plots', file: `static/plots/${category}_wordcloud_plot.html`, type: 'iframe', class: 'other-plots' },
+            ];
+
+            const menuDropdown = document.getElementById('menu_dropdown');
+            menuDropdown.innerHTML = ''; // Clear existing menu items
+
+            plots.forEach(plot => {
+                const container = document.createElement('div');
+                container.id = plot.id;
+                container.className = plot.class;
+                container.innerHTML = `<h3>${plot.title}:</h3>`;
+                plotArea.appendChild(container);
+
+                if (plot.type === 'iframe') {
+                    const iframe = document.createElement('iframe');
+                    iframe.src = plot.file;
+                    iframe.style.width = plot.id === 'wordcloud_plot' ? '100%' : '100%'; // Keep width 100%
+                    iframe.style.height = plot.id === 'wordcloud_plot' ? '700px' : '500px'; // Increase height for wordcloud plot
+                    container.appendChild(iframe);
+                } else if (plot.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = plot.file;
+                    img.alt = `${plot.title}`;
+                    container.appendChild(img);
+                }
+
+                const menuItem = document.createElement('a');
+                menuItem.href = `#${plot.id}`;
+                menuItem.textContent = plot.title;
+                menuDropdown.appendChild(menuItem);
+            });
+
+            document.querySelector('.hamburger-menu').style.display = 'block';
+        }
+    </script>
+
+
+</body>
+</html>

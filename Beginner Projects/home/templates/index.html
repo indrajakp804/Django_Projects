@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .form-container {
+            width: 60%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+        }
+
+        .om, .ed, .com {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn1 {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: rgb(35, 144, 208);
+            border-radius: 10px;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color:green; font-size:40px;">Resume</h1>
+    <form action="{% url 'resume' %}" method="post">
+        {% csrf_token %}
+        <div class="form-container">
+            <h2>Personal Information</h2>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="about">About:</label>
+                <input type="text" id="about" name="about">
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="text" id="age" name="age">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="skills">Skills:</label>
+                <div class="om">
+                    <input type="text" id="skill1" name="skill1">
+                    <input type="text" id="skill2" name="skill2">
+                    <input type="text" id="skill3" name="skill3">
+                    <input type="text" id="skill4" name="skill4">
+                    <input type="text" id="skill5" name="skill5">
+                </div>
+            </div>
+
+            <h2>Education</h2>
+            <!-- Education 1 -->
+            <div class="form-group">
+                <label for="degree1">Education 1:</label>
+            </div>
+            <div class="ed">
+                <input type="text" id="degree1" name="degree1" placeholder="Degree">
+                <input type="text" id="college1" name="college1" placeholder="College">
+                <input type="text" id="year1" name="year1" placeholder="Year">
+            </div>
+
+            <!-- Additional Education -->
+            <!-- Repeat for Education 2 and 3 -->
+
+            <h2>Languages</h2>
+            <div class="form-group">
+                <label for="language1">Languages:</label>
+                <div class="om">
+                    <input type="text" id="lang1" name="lang1">
+                    <input type="text" id="lang2" name="lang2">
+                    <input type="text" id="lang3" name="lang3">
+                </div>
+            </div>
+
+            <h2>Projects</h2>
+            <!-- Add projects similarly -->
+
+            <button type="submit" class="btn1">Submit</button>
+        </div>
+    </form>
+</body>
+</html>
