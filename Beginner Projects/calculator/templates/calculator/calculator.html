@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+    <style>
+        /* Set the entire page background color to light blue */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #e6e6fa;
+            margin: 0;
+        }
+
+        /* Heading styles */
+        .heading {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px #888;
+        }
+
+        /* Calculator container */
+        .calculator {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+
+        /* Display styles */
+        .display {
+            background-color: #e0e0e0;
+            padding: 15px;
+            font-size: 24px;
+            border-radius: 4px;
+            text-align: right;
+            margin-bottom: 10px;
+            height: 40px;
+        }
+
+        /* Button grid layout */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        /* Button styles */
+        .button {
+            padding: 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Operator button styling */
+        .button.operation {
+            background-color: #ff9f43;
+            color: white;
+        }
+
+        /* Equals button styling */
+        .button.equals {
+            background-color: #2ed573;
+            color: white;
+        }
+
+        /* Clear button styling */
+        .button.clear {
+            background-color: #ff4757;
+            color: white;
+        }
+
+        /* Delete button styling */
+        .button.delete {
+            background-color: #1e90ff;
+            color: white;
+        }
+
+        /* Hover effect */
+        .button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<!--     Heading for the page-->
+    <div class="heading">Calculator</div>
+
+    <!-- Calculator structure -->
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="button clear" onclick="clearDisplay()">C</button>
+            <button class="button delete" onclick="backspace()">←</button>
+            <button class="button operation" onclick="appendOperation('/')">/</button>
+            <button class="button operation" onclick="appendOperation('*')">x</button>
+            <button class="button" onclick="appendNumber('7')">7</button>
+            <button class="button" onclick="appendNumber('8')">8</button>
+            <button class="button" onclick="appendNumber('9')">9</button>
+            <button class="button operation" onclick="appendOperation('-')">-</button>
+            <button class="button" onclick="appendNumber('4')">4</button>
+            <button class="button" onclick="appendNumber('5')">5</button>
+            <button class="button" onclick="appendNumber('6')">6</button>
+            <button class="button operation" onclick="appendOperation('+')">+</button>
+            <button class="button" onclick="appendNumber('1')">1</button>
+            <button class="button" onclick="appendNumber('2')">2</button>
+            <button class="button" onclick="appendNumber('3')">3</button>
+            <button class="button equals" onclick="calculate()">=</button>
+            <button class="button" onclick="appendNumber('0')">0</button>
+            <button class="button" onclick="appendNumber('.')">.</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById("display");
+
+        function appendNumber(number) {
+            if (display.innerText === "0") {
+                display.innerText = number;
+            } else {
+                display.innerText += number;
+            }
+        }
+
+        function appendOperation(operation) {
+            const lastChar = display.innerText[display.innerText.length - 1];
+            if ("+-*/".includes(lastChar)) {
+                display.innerText = display.innerText.slice(0, -1) + operation;
+            } else {
+                display.innerText += operation;
+            }
+        }
+
+        function calculate() {
+            try {
+                display.innerText = eval(display.innerText);
+            } catch {
+                display.innerText = "Error";
+            }
+        }
+
+        function clearDisplay() {
+            display.innerText = "0";
+        }
+
+        function backspace() {
+            if (display.innerText.length > 1) {
+                display.innerText = display.innerText.slice(0, -1);
+            } else {
+                display.innerText = "0";
+            }
+        }
+    </script>
+</body>
+</html>

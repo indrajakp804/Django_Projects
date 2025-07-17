@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'bootstrap.html' %}
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <!-- Include custom snowfall CSS -->
+    <link rel="stylesheet" href="{% static 'css/snowfall.css' %}">
+</head>
+<body>
+    <!-- Snowfall container -->
+    <div id="snowfall"></div>
+
+    {% include 'navbar.html' %}
+
+    <div class="jumbotron">
+        <div class="paper">
+            {% include 'messages.html' %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Happy New Year message -->
+    <div id="happy-new-year" class="happy-new-year">
+        Happy New Year 2025!
+    </div>
+
+    <!-- Include snowfall JS -->
+    <script src="{% static 'js/snowfall.js' %}"></script>
+    <script>
+        // Initialize the snowfall effect
+        document.addEventListener("DOMContentLoaded", function() {
+            initSnowfall('snowfall');
+        });
+    </script>
+</body>
+</html>

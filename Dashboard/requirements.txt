@@ -1,0 +1,10 @@
+pandas
+selenium
+nltk
+sqlalchemy
+matplotlib
+seaborn
+plotly
+better-profanity
+wordcloud
+mplcursors

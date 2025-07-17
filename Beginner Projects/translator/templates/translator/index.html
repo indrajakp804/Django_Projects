@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f1ff;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #4CAF50; /* Green color */
+        }
+
+        /* Form Styles */
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        select {
+            padding: 10px;
+            width: 85%;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green */
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Styling the Select dropdown options */
+        select option {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Language Translator</h1>
+    <form method="post">
+        {% csrf_token %}
+        <!-- Retain the text input value after form submission -->
+        <input type="text" name="translate" placeholder="Enter text to translate" value="{{ text }}" required>
+        <br>
+        <!-- Retain the selected language after form submission -->
+        <select required name="language">
+            <option value="Hindi" {% if language == "Hindi" %}selected{% endif %}>Hindi</option>
+            <option value="Marathi" {% if language == "Marathi" %}selected{% endif %}>Marathi</option>
+            <option value="German" {% if language == "German" %}selected{% endif %}>German</option>
+            <option value="Malayalam" {% if language == "Malayalam" %}selected{% endif %}>Malayalam</option>
+            <option value="Tamil" {% if language == "Tamil" %}selected{% endif %}>Tamil</option>
+            <option value="Kannada" {% if language == "Kannada" %}selected{% endif %}>Kannada</option>
+            <option value="Telugu" {% if language == "Telugu" %}selected{% endif %}>Telugu</option>
+            <option value="French" {% if language == "French" %}selected{% endif %}>French</option>
+            <option value="Spanish" {% if language == "Spanish" %}selected{% endif %}>Spanish</option>
+            <option value="Chinese" {% if language == "Chinese" %}selected{% endif %}>Chinese</option>
+            <option value="Arabic" {% if language == "Arabic" %}selected{% endif %}>Arabic</option>
+            <option value="Russian" {% if language == "Russian" %}selected{% endif %}>Russian</option>
+            <option value="Portuguese" {% if language == "Portuguese" %}selected{% endif %}>Portuguese</option>
+            <option value="Bengali" {% if language == "Bengali" %}selected{% endif %}>Bengali</option>
+            <option value="Italian" {% if language == "Italian" %}selected{% endif %}>Italian</option>
+            <option value="Japanese" {% if language == "Japanese" %}selected{% endif %}>Japanese</option>
+            <option value="Korean" {% if language == "Korean" %}selected{% endif %}>Korean</option>
+            <option value="Turkish" {% if language == "Turkish" %}selected{% endif %}>Turkish</option>
+        </select>
+        <br>
+        <button type="submit">Translate</button>
+    </form>
+
+    {% if translation %}
+    <div class="result">
+        <p>Translated Text: {{ translation }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>

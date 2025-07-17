@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ blog.title }}{% endblock %}
+
+{% block content %}
+    <div class="blog-container">
+        <div class="header-container">
+            <h2 class="center-header">{{ blog.title }}</h2>
+            {% if request.user == blog.author %}
+                <div class="right-header">
+                    <a href="{% url 'blog:update' blog.id %}"><img src="{% static 'img/edit.png' %}" alt="Edit"></a>
+                    <a href="{% url 'blog:delete' blog.id %}"><img src="{% static 'img/delete.png' %}" alt="Delete"></a>
+                </div>
+            {% else %}
+                <div class="left-header">
+                    <a href="{% url 'blog:index' %}"><img src="{% static 'img/back.png' %}" alt="Back"></a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="blog-content">
+            <p>{{ blog.text }}</p>
+            <small><i>Published by {{ blog.author|title }} / {{ blog.published_date|timesince }}</i></small>
+        </div>
+
+        {% if blog.image %}
+            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="blog-image">
+        {% endif %}
+
+        <!-- Social media share icons -->
+        <div class="social-media-icons">
+            <h4 style="display: inline-block; margin-right: 2px; font-style: italic; color: red; font-size: 16px;">Share this blog via:</h4>
+            <a href="https://teams.microsoft.com/l/chat/0/0?users=email@example.com&message=Check%20the%20new%20blog%20on%20Ink%20and%20Ideas:%20{{ blog.title }}%20by%20{{ blog.author }}%20published%20on%20{{ blog.published_date|date:'Y-m-d' }}" target="_blank">
+                <img src="{% static 'img/teams-icon.png' %}" alt="Share on Teams" style="width: 30px; margin: 0 5px;">
+            </a>
+            <a href="mailto:?subject=Check%20the%20new%20blog%20on%20Ink%20and%20Ideas&body=Check%20the%20new%20blog%20on%20Ink%20and%20Ideas:%20{{ blog.title }}%20by%20{{ blog.author }}%20published%20on%20{{ blog.published_date|date:'Y-m-d' }}" target="_blank">
+                <img src="{% static 'img/mail-icon.png' %}" alt="Share via Email" style="width: 30px; margin: 0 5px;">
+            </a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://www.inkandideas.com&title=Check%20this%20post%20on%20Ink%20and%20Ideas" target="_blank">
+                <img src="{% static 'img/linkedin-icon.png' %}" alt="Share on LinkedIn" style="width: 30px; margin: 0 5px;">
+            </a>
+
+        </div>
+    </div>
+{% endblock %}
